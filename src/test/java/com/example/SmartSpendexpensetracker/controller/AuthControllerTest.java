@@ -15,6 +15,9 @@ import org.springframework.ui.Model;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.contains;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 class AuthControllerTest {
@@ -63,13 +66,19 @@ class AuthControllerTest {
         verify(model).addAttribute(eq("userForm"), any(UserSpend.class));
     }
 
-    @Test
-    void testSignupSubmit() {
-        when(userService.registerUser(anyString(), anyString(), anyString())).thenReturn(user);
-        String view = authController.signupSubmit(user, model);
-        assertEquals("message", view);
-        verify(model).addAttribute(eq("message"), contains("Registration successful"));
-    }
+@Test
+void testSignupSubmit() {
+    UserSpend user = new UserSpend();
+    user.setEmail("test@gmail.com");
+    user.setPassword("1234");
+    user.setFullName("Test User");
+
+    String view = authController.signupSubmit(user, model);
+
+    assertEquals("redirect:/login?registered=true", view);
+    verify(userService).registerUser("test@gmail.com", "1234", "Test User");
+}
+
 
     // -------------------- Verify Token --------------------
     @Test

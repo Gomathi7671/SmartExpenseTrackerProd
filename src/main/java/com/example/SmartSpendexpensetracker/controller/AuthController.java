@@ -39,11 +39,12 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public String signupSubmit(@ModelAttribute("userForm") @Valid UserSpend user, Model model) {
-        userService.registerUser(user.getEmail(), user.getPassword(), user.getFullName());
-        model.addAttribute("message", "Registration successful! Check your email to verify your account.");
-        return "message";
-    }
+public String signupSubmit(@ModelAttribute("userForm") @Valid UserSpend user, Model model) {
+    userService.registerUser(user.getEmail(), user.getPassword(), user.getFullName());
+    return "redirect:/login?registered=true";
+}
+
+
 
     // -------------------- Email Verification --------------------
     @GetMapping("/verify")
